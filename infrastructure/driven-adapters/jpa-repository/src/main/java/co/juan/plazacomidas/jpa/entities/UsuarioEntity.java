@@ -25,5 +25,8 @@ public class UsuarioEntity {
     private LocalDate fechaNacimiento;
     private String correo;
     private String clave;
-    private Long idRol;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_rol", nullable = false)
+    private RolEntity rol;
 }
