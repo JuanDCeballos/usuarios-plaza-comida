@@ -1,7 +1,7 @@
 package co.juan.plazacomidas.api.exceptionhandler;
 
 import co.juan.plazacomidas.api.dto.ApiErrorResponse;
-import co.juan.plazacomidas.model.usuario.exceptions.ResourceNotFoundException;
+import co.juan.plazacomidas.model.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
