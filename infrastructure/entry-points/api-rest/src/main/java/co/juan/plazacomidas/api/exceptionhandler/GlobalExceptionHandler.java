@@ -2,9 +2,11 @@ package co.juan.plazacomidas.api.exceptionhandler;
 
 import co.juan.plazacomidas.api.dto.ApiErrorResponse;
 import co.juan.plazacomidas.model.exceptions.ResourceNotFoundException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -64,6 +66,28 @@ public class GlobalExceptionHandler {
     public ApiErrorResponse handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
         return ApiErrorResponse.builder()
                 .errorMessage("Recurso no encontrado")
+                .details(ex.getMessage())
+                .timestamp(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+                .path(request.getRequestURI())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ApiErrorResponse handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        return ApiErrorResponse.builder()
+                .errorMessage("Acceso Denegado")
+                .details("No tienes los permisos necesarios para realizar esta acción.")
+                .timestamp(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+                .path(request.getRequestURI())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ApiErrorResponse handleExpiredJwtException(ExpiredJwtException ex, HttpServletRequest request) {
+        return ApiErrorResponse.builder()
+                .errorMessage("Token expirado")
                 .details(ex.getMessage())
                 .timestamp(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
                 .path(request.getRequestURI())
