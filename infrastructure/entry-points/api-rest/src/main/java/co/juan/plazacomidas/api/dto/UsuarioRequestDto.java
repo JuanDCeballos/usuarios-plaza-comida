@@ -38,8 +38,4 @@ public class UsuarioRequestDto {
 
     @NotBlank(message = "La clave es obligatoria")
     private String clave;
-
-    @NotNull(message = "El rol es obligatorio")
-    @Positive(message = "El rol debe ser un número positivo")
-    private Long idRol;
 }

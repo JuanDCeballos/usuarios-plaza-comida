@@ -43,7 +43,7 @@ public class ApiRest {
     public ResponseEntity<ApiSuccessResponse<UsuarioResponseDto>> crearPropietario(@Valid @RequestBody UsuarioRequestDto requestDto) {
         Usuario usuario = usuarioMapper.toUsuario(requestDto);
 
-        Usuario usuarioGuardado = usuarioUseCase.crearUsuario(usuario);
+        Usuario usuarioGuardado = usuarioUseCase.crearPropietario(usuario);
 
         UsuarioResponseDto responseDto = usuarioMapper.toUsuarioResponseDto(usuarioGuardado);
 
@@ -57,7 +57,7 @@ public class ApiRest {
     public ResponseEntity<ApiSuccessResponse<UsuarioResponseDto>> crearEmpleado(@Valid @RequestBody UsuarioRequestDto requestDto) {
         Usuario usuario = usuarioMapper.toUsuario(requestDto);
 
-        Usuario usuarioGuardado = usuarioUseCase.crearUsuario(usuario);
+        Usuario usuarioGuardado = usuarioUseCase.crearEmpleado(usuario);
 
         UsuarioResponseDto responseDto = usuarioMapper.toUsuarioResponseDto(usuarioGuardado);
 

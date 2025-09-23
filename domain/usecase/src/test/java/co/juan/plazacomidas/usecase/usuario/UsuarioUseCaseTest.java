@@ -1,7 +1,5 @@
 package co.juan.plazacomidas.usecase.usuario;
 
-import co.juan.plazacomidas.model.exceptions.ResourceNotFoundException;
-import co.juan.plazacomidas.model.rol.gateways.RolRepository;
 import co.juan.plazacomidas.model.usuario.Usuario;
 import co.juan.plazacomidas.model.usuario.gateways.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +26,6 @@ class UsuarioUseCaseTest {
     @Mock
     UsuarioRepository usuarioRepository;
 
-    @Mock
-    RolRepository rolRepository;
-
     private Usuario usuario;
     private Long idUsuario = 1L;
 
@@ -49,42 +44,26 @@ class UsuarioUseCaseTest {
     }
 
     @Test
-    void crearUsuario() {
-        when(rolRepository.existePorId(anyLong())).thenReturn(true);
+    void crearPropietario() {
         when(usuarioRepository.crearUsuario(any(Usuario.class))).thenReturn(usuario);
 
-        Usuario usuarioCreado = usuarioUseCase.crearUsuario(usuario);
+        Usuario usuarioCreado = usuarioUseCase.crearPropietario(usuario);
         assertNotNull(usuarioCreado);
         assertEquals("Juan", usuarioCreado.getNombre());
         assertEquals(123876456L, usuarioCreado.getDocumentoDeIdentidad());
 
-        verify(rolRepository, times(1)).existePorId(anyLong());
         verify(usuarioRepository, times(1)).crearUsuario(any(Usuario.class));
     }
 
     @Test
-    void crearUsuario_retornaException_usuarioMenorDeEdad() {
+    void crearPropietario_retornaException_usuarioMenorDeEdad() {
         usuario.setFechaNacimiento(LocalDate.of(2022, 9, 12));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            usuarioUseCase.crearUsuario(usuario);
+            usuarioUseCase.crearPropietario(usuario);
         });
         assertEquals("El usuario debe ser mayor de edad.", exception.getMessage());
 
-        verify(rolRepository, times(0)).existePorId(anyLong());
-        verify(usuarioRepository, times(0)).crearUsuario(any(Usuario.class));
-    }
-
-    @Test
-    void crearUsuario_retornaException_noExisteRol() {
-        when(rolRepository.existePorId(anyLong())).thenReturn(false);
-
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            usuarioUseCase.crearUsuario(usuario);
-        });
-        assertEquals("Rol no encontrado con id: " + usuario.getIdRol(), exception.getMessage());
-
-        verify(rolRepository, times(1)).existePorId(anyLong());
         verify(usuarioRepository, times(0)).crearUsuario(any(Usuario.class));
     }
 

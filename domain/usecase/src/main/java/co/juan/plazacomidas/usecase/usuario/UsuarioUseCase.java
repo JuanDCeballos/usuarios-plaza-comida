@@ -1,6 +1,5 @@
 package co.juan.plazacomidas.usecase.usuario;
 
-import co.juan.plazacomidas.model.rol.gateways.RolRepository;
 import co.juan.plazacomidas.model.usuario.Usuario;
 import co.juan.plazacomidas.model.exceptions.ResourceNotFoundException;
 import co.juan.plazacomidas.model.usuario.gateways.UsuarioRepository;
@@ -13,16 +12,19 @@ import java.time.Period;
 public class UsuarioUseCase {
 
     private final UsuarioRepository usuarioRepository;
-    private final RolRepository rolRepository;
 
-    public Usuario crearUsuario(Usuario usuario) {
+    public Usuario crearPropietario(Usuario usuario) {
         if (Period.between(usuario.getFechaNacimiento(), LocalDate.now()).getYears() < 18) {
             throw new IllegalArgumentException("El usuario debe ser mayor de edad.");
         }
 
-        if (!rolRepository.existePorId(usuario.getIdRol())) {
-            throw new ResourceNotFoundException("Rol no encontrado con id: " + usuario.getIdRol());
-        }
+        usuario.setIdRol(2L);
+
+        return usuarioRepository.crearUsuario(usuario);
+    }
+
+    public Usuario crearEmpleado(Usuario usuario) {
+        usuario.setIdRol(3L);
 
         return usuarioRepository.crearUsuario(usuario);
     }
