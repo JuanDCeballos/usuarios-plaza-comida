@@ -1,10 +1,16 @@
 package co.juan.plazacomidas.config;
 
+import co.juan.plazacomidas.model.rol.gateways.RolRepository;
+import co.juan.plazacomidas.model.usuario.Usuario;
+import co.juan.plazacomidas.model.usuario.gateways.UsuarioRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UseCasesConfigTest {
@@ -33,6 +39,16 @@ public class UseCasesConfigTest {
         @Bean
         public MyUseCase myUseCase() {
             return new MyUseCase();
+        }
+
+        @Bean
+        public UsuarioRepository usuarioRepository() {
+            return Mockito.mock(UsuarioRepository.class);
+        }
+
+        @Bean
+        public RolRepository rolRepository() {
+            return Mockito.mock(RolRepository.class);
         }
     }
 

@@ -1,0 +1,126 @@
+package co.juan.plazacomidas.usecase.usuario;
+
+import co.juan.plazacomidas.model.exceptions.ResourceNotFoundException;
+import co.juan.plazacomidas.model.rol.gateways.RolRepository;
+import co.juan.plazacomidas.model.usuario.Usuario;
+import co.juan.plazacomidas.model.usuario.gateways.UsuarioRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class UsuarioUseCaseTest {
+
+    @InjectMocks
+    UsuarioUseCase usuarioUseCase;
+
+    @Mock
+    UsuarioRepository usuarioRepository;
+
+    @Mock
+    RolRepository rolRepository;
+
+    private Usuario usuario;
+    private Long idUsuario = 1L;
+
+    @BeforeEach
+    void initMocks() {
+        usuario = new Usuario();
+        usuario.setIdUsuario(1L);
+        usuario.setNombre("Juan");
+        usuario.setApellido("Ceballos");
+        usuario.setDocumentoDeIdentidad(123876456L);
+        usuario.setCelular("3274859483");
+        usuario.setFechaNacimiento(LocalDate.of(2002, 9, 12));
+        usuario.setCorreo("juan.juan@correo.com.co");
+        usuario.setClave("123");
+        usuario.setIdRol(1L);
+    }
+
+    @Test
+    void crearUsuario() {
+        when(rolRepository.existePorId(anyLong())).thenReturn(true);
+        when(usuarioRepository.crearUsuario(any(Usuario.class))).thenReturn(usuario);
+
+        Usuario usuarioCreado = usuarioUseCase.crearUsuario(usuario);
+        assertNotNull(usuarioCreado);
+        assertEquals("Juan", usuarioCreado.getNombre());
+        assertEquals(123876456L, usuarioCreado.getDocumentoDeIdentidad());
+
+        verify(rolRepository, times(1)).existePorId(anyLong());
+        verify(usuarioRepository, times(1)).crearUsuario(any(Usuario.class));
+    }
+
+    @Test
+    void crearUsuario_retornaException_usuarioMenorDeEdad() {
+        usuario.setFechaNacimiento(LocalDate.of(2022, 9, 12));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            usuarioUseCase.crearUsuario(usuario);
+        });
+        assertEquals("El usuario debe ser mayor de edad.", exception.getMessage());
+
+        verify(rolRepository, times(0)).existePorId(anyLong());
+        verify(usuarioRepository, times(0)).crearUsuario(any(Usuario.class));
+    }
+
+    @Test
+    void crearUsuario_retornaException_noExisteRol() {
+        when(rolRepository.existePorId(anyLong())).thenReturn(false);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            usuarioUseCase.crearUsuario(usuario);
+        });
+        assertEquals("Rol no encontrado con id: " + usuario.getIdRol(), exception.getMessage());
+
+        verify(rolRepository, times(1)).existePorId(anyLong());
+        verify(usuarioRepository, times(0)).crearUsuario(any(Usuario.class));
+    }
+
+    @Test
+    void obtenerById() {
+        when(usuarioRepository.obtenerById(anyLong())).thenReturn(Optional.of(usuario));
+
+        Usuario usuarioObtenido = usuarioUseCase.obtenerById(idUsuario);
+        assertNotNull(usuarioObtenido);
+        assertEquals("Juan", usuarioObtenido.getNombre());
+        assertEquals(123876456L, usuarioObtenido.getDocumentoDeIdentidad());
+
+        verify(usuarioRepository, times(1)).obtenerById(anyLong());
+    }
+
+    @Test
+    void obtenerById_retornaException_parametroNull() {
+        idUsuario = null;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            usuarioUseCase.obtenerById(idUsuario);
+        });
+        assertEquals("El id del usuario debe ser un número positivo.", exception.getMessage());
+
+        verify(usuarioRepository, times(0)).obtenerById(anyLong());
+    }
+
+    @Test
+    void obtenerById_retornaException_parametroMenorAUno() {
+        idUsuario = 0L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            usuarioUseCase.obtenerById(idUsuario);
+        });
+        assertEquals("El id del usuario debe ser un número positivo.", exception.getMessage());
+
+        verify(usuarioRepository, times(0)).obtenerById(anyLong());
+    }
+}
