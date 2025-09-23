@@ -59,9 +59,7 @@ class UsuarioUseCaseTest {
     void crearPropietario_retornaException_usuarioMenorDeEdad() {
         usuario.setFechaNacimiento(LocalDate.of(2022, 9, 12));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            usuarioUseCase.crearPropietario(usuario);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> usuarioUseCase.crearPropietario(usuario));
         assertEquals("El usuario debe ser mayor de edad.", exception.getMessage());
 
         verify(usuarioRepository, times(0)).crearUsuario(any(Usuario.class));
@@ -83,9 +81,7 @@ class UsuarioUseCaseTest {
     void obtenerById_retornaException_parametroNull() {
         idUsuario = null;
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            usuarioUseCase.obtenerById(idUsuario);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> usuarioUseCase.obtenerById(idUsuario));
         assertEquals("El id del usuario debe ser un número positivo.", exception.getMessage());
 
         verify(usuarioRepository, times(0)).obtenerById(anyLong());
@@ -95,9 +91,7 @@ class UsuarioUseCaseTest {
     void obtenerById_retornaException_parametroMenorAUno() {
         idUsuario = 0L;
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            usuarioUseCase.obtenerById(idUsuario);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> usuarioUseCase.obtenerById(idUsuario));
         assertEquals("El id del usuario debe ser un número positivo.", exception.getMessage());
 
         verify(usuarioRepository, times(0)).obtenerById(anyLong());
