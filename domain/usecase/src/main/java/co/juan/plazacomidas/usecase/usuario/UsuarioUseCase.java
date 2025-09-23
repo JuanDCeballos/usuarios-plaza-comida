@@ -37,4 +37,9 @@ public class UsuarioUseCase {
         return usuarioRepository.obtenerById(idUsuario)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + idUsuario));
     }
+
+    public Usuario obtenerByCorreo(String correo) {
+        return usuarioRepository.obtenerByCorreo(correo)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el correo: " + correo));
+    }
 }

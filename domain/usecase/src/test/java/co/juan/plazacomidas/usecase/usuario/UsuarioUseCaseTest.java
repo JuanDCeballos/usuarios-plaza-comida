@@ -102,4 +102,30 @@ class UsuarioUseCaseTest {
 
         verify(usuarioRepository, times(0)).obtenerById(anyLong());
     }
+
+    @Test
+    void crearEmpleado() {
+        when(usuarioRepository.crearUsuario(any(Usuario.class))).thenReturn(usuario);
+
+        Usuario usuarioCreado = usuarioUseCase.crearEmpleado(usuario);
+        assertNotNull(usuarioCreado);
+        assertEquals("Juan", usuarioCreado.getNombre());
+        assertEquals(123876456L, usuarioCreado.getDocumentoDeIdentidad());
+
+        verify(usuarioRepository, times(1)).crearUsuario(any(Usuario.class));
+    }
+
+    @Test
+    void obtenerByCorreo() {
+        String correo = "juan.juan@correo.com.co";
+
+        when(usuarioRepository.obtenerByCorreo(anyString())).thenReturn(Optional.of(usuario));
+
+        Usuario usuarioObtenido = usuarioUseCase.obtenerByCorreo(correo);
+        assertNotNull(usuarioObtenido);
+        assertEquals("Juan", usuarioObtenido.getNombre());
+        assertEquals(123876456L, usuarioObtenido.getDocumentoDeIdentidad());
+
+        verify(usuarioRepository, times(1)).obtenerByCorreo(anyString());
+    }
 }

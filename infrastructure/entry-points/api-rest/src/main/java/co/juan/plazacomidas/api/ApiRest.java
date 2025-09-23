@@ -76,4 +76,15 @@ public class ApiRest {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(apiSuccessResponse);
     }
+
+    @GetMapping("/correo/{correo}")
+    public ResponseEntity<ApiSuccessResponse<UsuarioResponseDto>> obtenerByCorreo(@PathVariable("correo") String correo) {
+        Usuario usuario = usuarioUseCase.obtenerByCorreo(correo);
+
+        UsuarioResponseDto responseDto = usuarioMapper.toUsuarioResponseDto(usuario);
+
+        ApiSuccessResponse<UsuarioResponseDto> apiSuccessResponse = new ApiSuccessResponse<>(responseDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiSuccessResponse);
+    }
 }

@@ -9,4 +9,6 @@ public interface UsuarioRepository {
     Usuario crearUsuario(Usuario usuario);
 
     Optional<Usuario> obtenerById(Long idUsuario);
+
+    Optional<Usuario> obtenerByCorreo(String correo);
 }
