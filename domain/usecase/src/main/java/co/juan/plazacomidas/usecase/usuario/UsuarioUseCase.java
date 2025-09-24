@@ -29,6 +29,12 @@ public class UsuarioUseCase {
         return usuarioRepository.crearUsuario(usuario);
     }
 
+    public Usuario crearCliente(Usuario usuario) {
+        usuario.setIdRol(4L);
+
+        return usuarioRepository.crearUsuario(usuario);
+    }
+
     public Usuario obtenerById(Long idUsuario) {
         if (idUsuario == null || idUsuario.compareTo(1L) < 0) {
             throw new IllegalArgumentException("El id del usuario debe ser un número positivo.");

@@ -122,4 +122,16 @@ class UsuarioUseCaseTest {
 
         verify(usuarioRepository, times(1)).obtenerByCorreo(anyString());
     }
+
+    @Test
+    void crearCliente() {
+        when(usuarioRepository.crearUsuario(any(Usuario.class))).thenReturn(usuario);
+
+        Usuario usuarioCreado = usuarioUseCase.crearCliente(usuario);
+        assertNotNull(usuarioCreado);
+        assertEquals("Juan", usuarioCreado.getNombre());
+        assertEquals(123876456L, usuarioCreado.getDocumentoDeIdentidad());
+
+        verify(usuarioRepository, times(1)).crearUsuario(any(Usuario.class));
+    }
 }
