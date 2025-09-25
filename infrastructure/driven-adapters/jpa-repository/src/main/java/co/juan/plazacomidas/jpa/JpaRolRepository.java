@@ -4,5 +4,9 @@ import co.juan.plazacomidas.jpa.entities.RolEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 
+import java.util.Optional;
+
 public interface JpaRolRepository extends CrudRepository<RolEntity, Long>, QueryByExampleExecutor<RolEntity> {
+
+    Optional<RolEntity> findByNombre(String nombre);
 }
