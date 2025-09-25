@@ -11,4 +11,6 @@ public interface UsuarioRepository {
     Optional<Usuario> obtenerById(Long idUsuario);
 
     Optional<Usuario> obtenerByCorreo(String correo);
+
+    boolean existePorCorreo(String correo);
 }

@@ -56,4 +56,9 @@ public class JpaUsuarioRepositoryAdapter extends AdapterOperations<Usuario, Usua
         return repository.findByCorreo(correo)
                 .map(usuarioEntityMapper::toDomain);
     }
+
+    @Override
+    public boolean existePorCorreo(String correo) {
+        return repository.existsByCorreo(correo);
+    }
 }
