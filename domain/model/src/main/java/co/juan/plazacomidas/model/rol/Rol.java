@@ -14,6 +14,6 @@ import lombok.Setter;
 public class Rol {
 
     private Long idRol;
-    private String name;
+    private String nombre;
     private String descripcion;
 }

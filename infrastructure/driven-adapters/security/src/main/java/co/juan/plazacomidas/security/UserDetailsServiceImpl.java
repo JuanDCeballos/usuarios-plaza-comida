@@ -2,6 +2,7 @@ package co.juan.plazacomidas.security;
 
 import co.juan.plazacomidas.jpa.JpaUsuarioRepository;
 import co.juan.plazacomidas.jpa.entities.UsuarioEntity;
+import co.juan.plazacomidas.model.utils.MensajesEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
         UsuarioEntity usuario = jpaUsuarioRepository.findByCorreo(correo)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el correo: " + correo));
+                .orElseThrow(() -> new UsernameNotFoundException(MensajesEnum.USUARIO_NO_ENCONTRADO_POR_CORREO.getMensaje() + correo));
 
         List<GrantedAuthority> authorities = Collections.singletonList(
                 new SimpleGrantedAuthority(usuario.getRol().getNombre())

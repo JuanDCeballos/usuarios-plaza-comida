@@ -2,6 +2,7 @@ package co.juan.plazacomidas.api.exceptionhandler;
 
 import co.juan.plazacomidas.api.dto.ApiErrorResponse;
 import co.juan.plazacomidas.model.exceptions.ResourceNotFoundException;
+import co.juan.plazacomidas.model.exceptions.UsuarioYaRegistradoException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -88,6 +89,18 @@ public class GlobalExceptionHandler {
     public ApiErrorResponse handleExpiredJwtException(ExpiredJwtException ex, HttpServletRequest request) {
         return ApiErrorResponse.builder()
                 .errorMessage("Token expirado")
+                .details(ex.getMessage())
+                .timestamp(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+                .path(request.getRequestURI())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UsuarioYaRegistradoException.class)
+    public ApiErrorResponse handleUsuarioYaRegistradoException(
+            UsuarioYaRegistradoException ex, HttpServletRequest request) {
+        return ApiErrorResponse.builder()
+                .errorMessage("Correo ya registrado")
                 .details(ex.getMessage())
                 .timestamp(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME))
                 .path(request.getRequestURI())

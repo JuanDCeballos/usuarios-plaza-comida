@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface JpaUsuarioRepository extends CrudRepository<UsuarioEntity, Long>, QueryByExampleExecutor<UsuarioEntity> {
 
     Optional<UsuarioEntity> findByCorreo(String correo);
+
+    boolean existsByCorreo(String correo);
 }
