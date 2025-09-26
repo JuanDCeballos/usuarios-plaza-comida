@@ -43,7 +43,7 @@ public class ApiRest {
     public ResponseEntity<ApiSuccessResponse<UsuarioResponseDto>> crearPropietario(@Valid @RequestBody UsuarioRequestDto requestDto) {
         Usuario usuario = usuarioMapper.toUsuario(requestDto);
 
-        Usuario usuarioGuardado = usuarioUseCase.crearUsuario(usuario);
+        Usuario usuarioGuardado = usuarioUseCase.crearPropietario(usuario);
 
         UsuarioResponseDto responseDto = usuarioMapper.toUsuarioResponseDto(usuarioGuardado);
 
@@ -57,7 +57,7 @@ public class ApiRest {
     public ResponseEntity<ApiSuccessResponse<UsuarioResponseDto>> crearEmpleado(@Valid @RequestBody UsuarioRequestDto requestDto) {
         Usuario usuario = usuarioMapper.toUsuario(requestDto);
 
-        Usuario usuarioGuardado = usuarioUseCase.crearUsuario(usuario);
+        Usuario usuarioGuardado = usuarioUseCase.crearEmpleado(usuario);
 
         UsuarioResponseDto responseDto = usuarioMapper.toUsuarioResponseDto(usuarioGuardado);
 
@@ -69,6 +69,17 @@ public class ApiRest {
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<ApiSuccessResponse<UsuarioResponseDto>> obtenerById(@PathVariable("idUsuario") Long idUsuario) {
         Usuario usuario = usuarioUseCase.obtenerById(idUsuario);
+
+        UsuarioResponseDto responseDto = usuarioMapper.toUsuarioResponseDto(usuario);
+
+        ApiSuccessResponse<UsuarioResponseDto> apiSuccessResponse = new ApiSuccessResponse<>(responseDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiSuccessResponse);
+    }
+
+    @GetMapping("/correo/{correo}")
+    public ResponseEntity<ApiSuccessResponse<UsuarioResponseDto>> obtenerByCorreo(@PathVariable("correo") String correo) {
+        Usuario usuario = usuarioUseCase.obtenerByCorreo(correo);
 
         UsuarioResponseDto responseDto = usuarioMapper.toUsuarioResponseDto(usuario);
 

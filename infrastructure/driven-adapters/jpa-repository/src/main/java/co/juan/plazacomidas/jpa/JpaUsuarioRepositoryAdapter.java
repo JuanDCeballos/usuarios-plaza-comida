@@ -50,4 +50,15 @@ public class JpaUsuarioRepositoryAdapter extends AdapterOperations<Usuario, Usua
         return repository.findById(idUsuario)
                 .map(usuarioEntityMapper::toDomain);
     }
+
+    @Override
+    public Optional<Usuario> obtenerByCorreo(String correo) {
+        return repository.findByCorreo(correo)
+                .map(usuarioEntityMapper::toDomain);
+    }
+
+    @Override
+    public boolean existePorCorreo(String correo) {
+        return repository.existsByCorreo(correo);
+    }
 }
