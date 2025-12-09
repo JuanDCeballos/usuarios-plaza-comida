@@ -1,14 +1,40 @@
-##Spring Configuration
 server:
   port: 8080
 spring:
   application:
-    name: usuarios
+    name: "usuarios"
   devtools:
     add-properties: false
   h2:
     console:
       enabled: true
-      path: /h2
+      path: "/h2"
   profiles:
-    include:
+    include: null
+  datasource:
+    url: "jdbc:mysql://localhost:xxx/usuarios_plaza_de_comidas?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+    username: "xx"
+    password: "xxx"
+    driverClassName: "com.mysql.cj.jdbc.Driver"
+  jpa:
+    databasePlatform: "org.hibernate.dialect.MySQLDialect"
+    hibernate:
+      ddl-auto: "update"
+    show-sql: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
+jwt:
+  secret: xxx
+springdoc:
+  info:
+    title: "API de microservicio de usuarios"
+    description: "Documentación de los endpoints para la gestión de usuarios"
